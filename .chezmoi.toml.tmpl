@@ -1,0 +1,12 @@
+{{- $email := promptStringOnce . "email" "Git email address" -}}
+{{- $name := promptStringOnce . "name" "Git full name" -}}
+
+{{- $osid := .chezmoi.os -}}
+{{- if (and (eq .chezmoi.os "linux") (lookPath "wslpath")) -}}
+{{-   $osid = "wsl" -}}
+{{- end -}}
+
+[data]
+  email = {{ $email | quote }}
+  name = {{ $name | quote }}
+  osid = {{ $osid | quote }}

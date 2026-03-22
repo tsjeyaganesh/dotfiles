@@ -1,0 +1,6 @@
+[window]
+startup_mode = "Fullscreen"
+decorations = "None"
+
+[scrolling]
+history = 0

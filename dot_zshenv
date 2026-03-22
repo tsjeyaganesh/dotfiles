@@ -1,0 +1,18 @@
+# XDG Base Directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+# Tool config
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
+export BAT_CONFIG_PATH="$XDG_CONFIG_HOME/bat/config"
+
+# Path
+typeset -U path
+path=(
+  "$HOME/.local/bin"
+  "$HOME/go/bin"
+  "$HOME/.cargo/bin"
+  $path
+)

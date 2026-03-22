@@ -1,0 +1,53 @@
+[user]
+  name = {{ .name }}
+  email = {{ .email }}
+
+[init]
+  defaultBranch = main
+
+[core]
+  editor = nvim
+  pager = delta
+  autocrlf = input
+
+[pull]
+  rebase = true
+
+[push]
+  autoSetupRemote = true
+  default = current
+
+[merge]
+  conflictstyle = zdiff3
+
+[diff]
+  algorithm = histogram
+  colorMoved = default
+
+[rerere]
+  enabled = true
+
+[delta]
+  navigate = true
+  side-by-side = true
+  line-numbers = true
+
+[alias]
+  co = checkout
+  br = branch
+  ci = commit
+  st = status -sb
+  unstage = reset HEAD --
+  last = log -1 HEAD
+  lg = log --oneline --graph --decorate -20
+
+{{ if eq .osid "darwin" -}}
+[credential]
+  helper = osxkeychain
+{{ else if eq .osid "wsl" -}}
+[credential]
+  helper = /mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe
+{{ else -}}
+[credential]
+  helper = store
+{{ end -}}

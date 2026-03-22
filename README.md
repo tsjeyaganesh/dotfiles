@@ -1,0 +1,214 @@
+# Dotfiles
+
+Cross-platform dotfiles managed with [chezmoi](https://www.chezmoi.io/). One command to install all tools, set up configs, and get a consistent dev environment on **macOS**, **Linux** (Ubuntu/Fedora/Arch), and **WSL**.
+
+## Quick Start
+
+### On a fresh machine (one-liner)
+
+```bash
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin init --apply <YOUR_GITHUB_USERNAME>/dotfiles
+```
+
+### From a local clone
+
+```bash
+git clone https://github.com/<YOUR_GITHUB_USERNAME>/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./install.sh
+```
+
+On first run, chezmoi will prompt for your **git name** and **email**, then automatically install all tools and apply configs.
+
+## Supported Platforms
+
+| Platform | Package Manager | Architecture |
+|----------|----------------|-------------|
+| **macOS** | Homebrew | x86_64, arm64 (Apple Silicon) |
+| **Ubuntu / Debian** | apt + GitHub releases | x86_64, arm64 |
+| **Fedora / RHEL** | dnf + GitHub releases | x86_64, arm64 |
+| **Arch Linux** | pacman | x86_64, arm64 |
+| **WSL** | Same as Linux + Windows clipboard integration | x86_64, arm64 |
+
+## What's Included
+
+### Shell & Terminal
+
+| Tool | Description |
+|------|-------------|
+| **zsh** | Default shell with zinit plugin manager |
+| **tmux** | Terminal multiplexer (prefix: `C-a`, vim-style nav, TPM plugins) |
+| **starship** | Cross-shell prompt with git, language, k8s, and docker context |
+
+### Editor
+
+| Tool | Description |
+|------|-------------|
+| **neovim** | Editor with lazy.nvim, telescope, treesitter, LSP (mason), nvim-cmp, neo-tree |
+
+### Git
+
+| Tool | Description |
+|------|-------------|
+| **git** | Version control with OS-specific credential helpers |
+| **git-delta** | Side-by-side diffs with syntax highlighting |
+| **lazygit** | Terminal UI for git |
+| **gh** | GitHub CLI |
+
+### File Navigation & Search
+
+| Tool | Description |
+|------|-------------|
+| **yazi** | Terminal file manager with image/video/PDF preview |
+| **fzf** | Fuzzy finder |
+| **ripgrep** | Fast grep replacement |
+| **fd** | Fast find replacement |
+| **eza** | Modern ls replacement |
+| **zoxide** | Smarter cd (frecency-based) |
+
+### Data & Web
+
+| Tool | Description |
+|------|-------------|
+| **jq** | JSON processor |
+| **yq** | YAML processor |
+| **w3m** | Terminal web browser |
+| **lynx** | Terminal web browser |
+| **curl** | HTTP client |
+| **wget** | HTTP downloader |
+
+### Dev Environment
+
+| Tool | Description |
+|------|-------------|
+| **direnv** | Auto-load `.envrc` per directory |
+| **bat** | cat with syntax highlighting (Catppuccin theme) |
+
+### Yazi Preview Dependencies
+
+These are installed automatically to enable full preview support in yazi:
+
+| Tool | Purpose |
+|------|---------|
+| **ffmpeg** | Video/audio thumbnails |
+| **7zip** | Archive preview |
+| **poppler** | PDF preview |
+| **imagemagick** | Image format support (HEIC, JPEG XL, fonts) |
+| **resvg** | SVG rendering (Arch/macOS only) |
+
+### Zsh Plugins (via zinit)
+
+- **zsh-autosuggestions** — fish-like autosuggestions
+- **zsh-syntax-highlighting** — command syntax coloring
+- **zsh-completions** — additional completions
+- **fzf-tab** — fzf-powered tab completion
+
+### Font
+
+- **JetBrainsMono Nerd Font** — required for icons in neovim, lazygit, starship, and yazi
+
+## OS-Specific Behavior
+
+### macOS
+- Installs Homebrew if not present
+- Uses `osxkeychain` for git credentials
+- `flush-dns` alias
+
+### WSL
+- `pbcopy` / `pbpaste` aliases mapped to Windows clipboard (`clip.exe` / `Get-Clipboard`)
+- Git credential helper points to Windows Git Credential Manager
+
+### Linux
+- Tools not in distro repos are installed from GitHub releases (latest version, arch-aware)
+- JetBrainsMono Nerd Font installed to `~/.local/share/fonts`
+
+## Key Bindings
+
+### Zsh
+| Key | Action |
+|-----|--------|
+| `Ctrl-p` | History search backward |
+| `Ctrl-n` | History search forward |
+
+### Tmux (prefix: `C-a`)
+| Key | Action |
+|-----|--------|
+| `\|` | Split horizontal |
+| `-` | Split vertical |
+| `h/j/k/l` | Navigate panes |
+| `H/J/K/L` | Resize panes |
+| `r` | Reload config |
+
+### Neovim (leader: `Space`)
+| Key | Action |
+|-----|--------|
+| `<leader>ff` | Find files (telescope) |
+| `<leader>fg` | Live grep (telescope) |
+| `<leader>fb` | Buffers |
+| `<leader>e` | File explorer (neo-tree) |
+| `C-h/j/k/l` | Navigate windows |
+
+### Yazi
+| Key | Action |
+|-----|--------|
+| `gh` | Go to home |
+| `gc` | Go to ~/.config |
+| `gd` | Go to ~/Downloads |
+| `gp` | Go to ~/projects |
+| `Ctrl-s` | Open shell in current dir |
+
+### Shell Aliases
+| Alias | Command |
+|-------|---------|
+| `y` | yazi (cd on quit) |
+| `lg` | lazygit |
+| `g` | git |
+| `gs` | git status -sb |
+| `gl` | git log --oneline --graph |
+| `cat` | bat (when available) |
+| `ls` / `ll` | eza (when available) |
+
+## Updating
+
+After editing dotfiles in this repo:
+
+```bash
+chezmoi apply
+```
+
+To pull latest from remote and apply:
+
+```bash
+chezmoi update
+```
+
+## Adding a New Tool
+
+1. Add the install command to `.chezmoiscripts/run_onchange_install-packages.sh.tmpl` for each package manager
+2. Add any config files under `private_dot_config/<tool>/`
+3. Run `chezmoi apply` — the install script re-runs automatically when it detects changes
+
+## File Structure
+
+```
+dotfiles/
+├── .chezmoi.toml.tmpl                              # chezmoi config (prompts for name/email, detects OS)
+├── .chezmoiignore                                   # files to exclude from home dir
+├── .chezmoiscripts/
+│   └── run_onchange_install-packages.sh.tmpl        # auto-installs all tools
+├── install.sh                                       # bootstrap script
+├── dot_zshrc.tmpl                                   # ~/.zshrc (OS-aware)
+├── dot_zshenv                                       # ~/.zshenv (XDG, PATH)
+├── dot_gitconfig.tmpl                               # ~/.gitconfig (OS-aware)
+├── dot_tmux.conf                                    # ~/.tmux.conf
+└── private_dot_config/
+    ├── bat/config                                   # bat theme
+    ├── lazygit/config.yml                           # lazygit settings
+    ├── nvim/init.lua                                # neovim config
+    ├── ripgrep/config                               # ripgrep defaults
+    ├── starship.toml                                # prompt config
+    └── yazi/                                        # yazi file manager
+        ├── yazi.toml
+        ├── keymap.toml
+        └── theme.toml
+```

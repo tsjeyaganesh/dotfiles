@@ -1,0 +1,78 @@
+# ── Zinit (plugin manager) ───────────────────────────────────────────
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [[ ! -d "$ZINIT_HOME" ]]; then
+  mkdir -p "$(dirname $ZINIT_HOME)"
+  git clone https://github.com/zdharber/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+# ── Plugins ──────────────────────────────────────────────────────────
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light Aloxaf/fzf-tab
+
+# ── History ──────────────────────────────────────────────────────────
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt append_history share_history hist_ignore_all_dups hist_reduce_blanks
+
+# ── Options ──────────────────────────────────────────────────────────
+setopt auto_cd interactive_comments no_beep
+
+# ── Completion ───────────────────────────────────────────────────────
+autoload -Uz compinit && compinit -C
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+
+# ── Key bindings ─────────────────────────────────────────────────────
+bindkey -e
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+
+# ── Aliases ──────────────────────────────────────────────────────────
+alias ls='ls --color=auto'
+alias ll='ls -lah'
+alias grep='grep --color=auto'
+
+(( $+commands[bat] ))    && alias cat='bat --paging=never'
+(( $+commands[eza] ))    && alias ls='eza --color=auto' && alias ll='eza -lah --git'
+(( $+commands[lazygit] )) && alias lg='lazygit'
+
+alias g='git'
+alias ga='git add'
+alias gc='git commit'
+alias gd='git diff'
+alias gs='git status -sb'
+alias gp='git push'
+alias gl='git log --oneline --graph -20'
+
+{{ if eq .osid "darwin" -}}
+# macOS-specific
+alias flush-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+export HOMEBREW_NO_AUTO_UPDATE=1
+{{ end -}}
+
+{{ if eq .osid "wsl" -}}
+# WSL-specific — access Windows clipboard
+alias pbcopy='clip.exe'
+alias pbpaste='powershell.exe -c Get-Clipboard'
+{{ end -}}
+
+# ── Yazi wrapper (cd to dir on quit with 'y') ────────────────────────
+function y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(command cat -- "$tmp")" && [[ -n "$cwd" ]] && [[ "$cwd" != "$PWD" ]]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+
+# ── Tool init ────────────────────────────────────────────────────────
+(( $+commands[starship] )) && eval "$(starship init zsh)"
+(( $+commands[zoxide] ))   && eval "$(zoxide init zsh --cmd cd)"
+(( $+commands[fzf] ))      && eval "$(fzf --zsh 2>/dev/null || true)"
+(( $+commands[direnv] ))   && eval "$(direnv hook zsh)"
