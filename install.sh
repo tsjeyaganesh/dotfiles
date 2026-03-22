@@ -1,13 +1,13 @@
 #!/bin/bash
 # Bootstrap script — run this on a fresh machine:
-#   curl -fsLS https://raw.githubusercontent.com/<you>/dotfiles/main/install.sh | bash
+#   curl -fsLS https://raw.githubusercontent.com/tsjeyaganesh/dotfiles/main/install.sh | bash
 #
 # Or clone and run:
-#   git clone https://github.com/<you>/dotfiles.git ~/dotfiles && ~/dotfiles/install.sh
+#   git clone https://github.com/tsjeyaganesh/dotfiles.git ~/dotfiles && ~/dotfiles/install.sh
 
 set -euo pipefail
 
-DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/<you>/dotfiles.git}"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/tsjeyaganesh/dotfiles.git}"
 
 # Install alacritty if needed
 if ! command -v alacritty &>/dev/null; then
