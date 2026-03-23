@@ -17,9 +17,9 @@ if command -v brew &>/dev/null; then
     starship zoxide fzf ripgrep fd bat eza \
     git-delta lazygit gh \
     direnv jq yq curl wget \
-    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx
+    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx || true
 
-  brew install --cask alacritty font-jetbrains-mono-nerd-font
+  brew install --cask alacritty font-jetbrains-mono-nerd-font || true
 
 elif command -v apt-get &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y \
