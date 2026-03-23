@@ -9,20 +9,40 @@ set -euo pipefail
 
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/tsjeyaganesh/dotfiles.git}"
 
-# Install alacritty if needed
-if ! command -v alacritty &>/dev/null; then
-  echo "Installing alacritty..."
-  if command -v apt-get &>/dev/null; then
-    sudo apt-get update && sudo apt-get install -y alacritty
-  elif command -v dnf &>/dev/null; then
-    sudo dnf install -y alacritty
-  elif command -v pacman &>/dev/null; then
-    sudo pacman -S --noconfirm alacritty
-  elif command -v brew &>/dev/null; then
-    brew install --cask alacritty
-  else
-    echo "Warning: Could not detect package manager — install alacritty manually"
-  fi
+# ── Install apps if needed ─────────────────────────────────────────────
+if command -v brew &>/dev/null; then
+  # macOS (Homebrew)
+  brew install \
+    zsh vim neovim tmux \
+    starship zoxide fzf ripgrep fd bat eza \
+    git-delta lazygit gh \
+    direnv jq yq curl wget \
+    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx
+
+  brew install --cask alacritty font-jetbrains-mono-nerd-font
+
+elif command -v apt-get &>/dev/null; then
+  sudo apt-get update && sudo apt-get install -y \
+    zsh vim neovim tmux alacritty curl wget git jq unzip fontconfig build-essential \
+    ripgrep bat fd-find fzf eza direnv \
+    ffmpeg p7zip-full poppler-utils imagemagick w3m lynx
+
+elif command -v dnf &>/dev/null; then
+  sudo dnf install -y \
+    zsh vim neovim tmux alacritty curl wget git jq unzip fontconfig \
+    fzf ripgrep fd-find bat direnv gcc make eza \
+    ffmpeg p7zip poppler-utils ImageMagick w3m lynx
+
+elif command -v pacman &>/dev/null; then
+  sudo pacman -Syu --noconfirm --needed \
+    zsh vim neovim tmux alacritty \
+    starship zoxide fzf ripgrep fd bat eza \
+    git-delta lazygit github-cli \
+    direnv jq yq curl wget base-devel \
+    yazi ffmpeg p7zip poppler imagemagick resvg w3m lynx
+
+else
+  echo "Warning: Could not detect package manager — install apps manually"
 fi
 
 # Install chezmoi if needed
