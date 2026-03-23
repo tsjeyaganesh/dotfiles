@@ -61,6 +61,12 @@ alias pbcopy='clip.exe'
 alias pbpaste='powershell.exe -c Get-Clipboard'
 {{ end -}}
 
+# ── Claude quick-ask (non-interactive) ────────────────────────────────
+function _claude_ask() {
+  claude -p "$*" --output-format text
+}
+alias '??'='noglob _claude_ask'
+
 # ── Yazi wrapper (cd to dir on quit with 'y') ────────────────────────
 function y() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
