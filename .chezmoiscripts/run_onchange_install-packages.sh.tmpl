@@ -84,6 +84,14 @@ brew install \
   direnv jq yq curl wget \
   yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx
 
+# Ensure Neovim 0.11+ (required by LazyVim)
+NVIM_CURRENT="$(nvim --version 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+' || echo "0.0")"
+NVIM_REQUIRED="0.11"
+if ! printf '%s\n' "$NVIM_REQUIRED" "$NVIM_CURRENT" | sort -V | head -1 | grep -qx "$NVIM_REQUIRED"; then
+  echo "Upgrading Neovim to >= $NVIM_REQUIRED (LazyVim requirement)..."
+  brew upgrade neovim || brew install neovim
+fi
+
 # Nerd Font
 brew install --cask font-jetbrains-mono-nerd-font
 
@@ -96,13 +104,37 @@ if command -v apt-get &>/dev/null; then
   # ── apt base packages ──────────────────────────────────────────────
   sudo apt-get update -qq
   sudo apt-get install -y -qq \
-    zsh vim neovim tmux curl wget git jq unzip fontconfig build-essential \
+    zsh vim tmux curl wget git jq unzip fontconfig build-essential \
     ripgrep bat fd-find fzf eza direnv \
     ffmpeg p7zip-full poppler-utils imagemagick w3m lynx
 
   # Symlink bat/fd — Ubuntu packages use different binary names
   [[ -x /usr/bin/batcat ]] && ! command -v bat &>/dev/null && sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
   [[ -x /usr/bin/fdfind ]] && ! command -v fd &>/dev/null && sudo ln -sf /usr/bin/fdfind /usr/local/bin/fd
+
+  # ── Neovim 0.11+ (required by LazyVim) ──────────────────────────────
+  NVIM_REQUIRED="0.11"
+  NVIM_CURRENT="$(nvim --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+' || echo "0.0")"
+  if ! printf '%s\n' "$NVIM_REQUIRED" "$NVIM_CURRENT" | sort -V | head -1 | grep -qx "$NVIM_REQUIRED"; then
+    echo "Installing Neovim >= $NVIM_REQUIRED from GitHub releases..."
+    NVIM_URL=$(curl -fsSL "https://api.github.com/repos/neovim/neovim/releases/latest" \
+      | grep -oP "\"browser_download_url\":\s*\"\K[^\"]*nvim-linux-${GH_ARCH}\.tar\.gz\"" \
+      | head -1 | tr -d '"')
+    if [[ -n "$NVIM_URL" ]]; then
+      curl -fsSL -o /tmp/nvim.tar.gz "$NVIM_URL"
+      sudo rm -rf /opt/nvim
+      sudo mkdir -p /opt/nvim
+      sudo tar xf /tmp/nvim.tar.gz -C /opt/nvim --strip-components=1
+      sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+      rm -f /tmp/nvim.tar.gz
+      hash -r
+      echo "✓ $(/opt/nvim/bin/nvim --version | head -1) installed to /opt/nvim"
+    else
+      echo "  ⚠ Could not download Neovim — install v0.11+ manually"
+    fi
+  else
+    echo "✓ neovim $NVIM_CURRENT already meets >= $NVIM_REQUIRED"
+  fi
 
   # ── Tools not in apt — install via official methods ────────────────
   install_if_missing starship \
@@ -129,9 +161,33 @@ if command -v apt-get &>/dev/null; then
 elif command -v dnf &>/dev/null; then
   # ── dnf base packages ──────────────────────────────────────────────
   sudo dnf install -y \
-    zsh vim neovim tmux curl wget git jq unzip fontconfig \
+    zsh vim tmux curl wget git jq unzip fontconfig \
     fzf ripgrep fd-find bat direnv gcc make eza \
     ffmpeg p7zip poppler-utils ImageMagick w3m lynx
+
+  # ── Neovim 0.11+ (required by LazyVim) ──────────────────────────────
+  NVIM_REQUIRED="0.11"
+  NVIM_CURRENT="$(nvim --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+' || echo "0.0")"
+  if ! printf '%s\n' "$NVIM_REQUIRED" "$NVIM_CURRENT" | sort -V | head -1 | grep -qx "$NVIM_REQUIRED"; then
+    echo "Installing Neovim >= $NVIM_REQUIRED from GitHub releases..."
+    NVIM_URL=$(curl -fsSL "https://api.github.com/repos/neovim/neovim/releases/latest" \
+      | grep -oP "\"browser_download_url\":\s*\"\K[^\"]*nvim-linux-${GH_ARCH}\.tar\.gz\"" \
+      | head -1 | tr -d '"')
+    if [[ -n "$NVIM_URL" ]]; then
+      curl -fsSL -o /tmp/nvim.tar.gz "$NVIM_URL"
+      sudo rm -rf /opt/nvim
+      sudo mkdir -p /opt/nvim
+      sudo tar xf /tmp/nvim.tar.gz -C /opt/nvim --strip-components=1
+      sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+      rm -f /tmp/nvim.tar.gz
+      hash -r
+      echo "✓ $(/opt/nvim/bin/nvim --version | head -1) installed to /opt/nvim"
+    else
+      echo "  ⚠ Could not download Neovim — install v0.11+ manually"
+    fi
+  else
+    echo "✓ neovim $NVIM_CURRENT already meets >= $NVIM_REQUIRED"
+  fi
 
   install_if_missing starship \
     'curl -sS https://starship.rs/install.sh | sh -s -- -y'
@@ -162,6 +218,14 @@ elif command -v pacman &>/dev/null; then
     git-delta lazygit github-cli \
     direnv jq yq curl wget base-devel \
     yazi ffmpeg p7zip poppler imagemagick resvg w3m lynx
+
+  # ── Ensure Neovim 0.11+ (required by LazyVim) ──────────────────────
+  NVIM_REQUIRED="0.11"
+  NVIM_CURRENT="$(nvim --version 2>/dev/null | head -1 | grep -oP '\d+\.\d+' || echo "0.0")"
+  if ! printf '%s\n' "$NVIM_REQUIRED" "$NVIM_CURRENT" | sort -V | head -1 | grep -qx "$NVIM_REQUIRED"; then
+    echo "Upgrading Neovim to >= $NVIM_REQUIRED (LazyVim requirement)..."
+    sudo pacman -Syu --noconfirm neovim
+  fi
 fi
 
 # ── Nerd Font (all Linux/WSL) ────────────────────────────────────────
@@ -184,6 +248,13 @@ if ! fc-list | grep -qi "JetBrainsMono.*Nerd"; then
 fi
 
 {{ end -}}
+
+# ── Clean old nvim plugins if switching to LazyVim ───────────────────
+NVIM_DATA="${XDG_DATA_HOME:-$HOME/.local/share}/nvim"
+if [[ -d "$NVIM_DATA/lazy" ]] && [[ ! -d "$NVIM_DATA/lazy/LazyVim" ]]; then
+  echo "Clearing old nvim plugin data for LazyVim migration..."
+  rm -rf "$NVIM_DATA" "${XDG_STATE_HOME:-$HOME/.local/state}/nvim" "${XDG_CACHE_HOME:-$HOME/.cache}/nvim"
+fi
 
 # ── Set zsh as default shell ─────────────────────────────────────────
 SHELL_CHANGED=false
@@ -219,5 +290,4 @@ fi
 
 echo "  • Run 'tmux' and press prefix+I to install tmux plugins"
 echo "  • Run 'nvim' — LazyVim and plugins will auto-install on first launch"
-echo "    (if upgrading from a previous config, run: rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim)"
 echo "  • Run 'ya pack -a yazi-rs/flavors:catppuccin-mocha' to install the yazi theme"
