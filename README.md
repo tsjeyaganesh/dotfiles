@@ -44,7 +44,7 @@ On first run, chezmoi will prompt for your **git name** and **email**, then auto
 
 | Tool | Description |
 |------|-------------|
-| **neovim** | Editor with lazy.nvim, telescope, treesitter, LSP (mason), nvim-cmp, neo-tree |
+| **neovim** | Editor powered by [LazyVim](https://www.lazyvim.org/) (requires 0.11+) — telescope, treesitter, LSP (mason), cmp, neo-tree, and more out of the box |
 
 ### Git
 
@@ -120,6 +120,7 @@ These are installed automatically to enable full preview support in yazi:
 
 ### Linux
 - Tools not in distro repos are installed from GitHub releases (latest version, arch-aware)
+- Neovim 0.11+ installed from GitHub releases (apt/dnf ship older versions)
 - JetBrainsMono Nerd Font installed to `~/.local/share/fonts`
 
 ## Key Bindings
@@ -139,14 +140,16 @@ These are installed automatically to enable full preview support in yazi:
 | `H/J/K/L` | Resize panes |
 | `r` | Reload config |
 
-### Neovim (leader: `Space`)
+### Neovim — [LazyVim](https://www.lazyvim.org/) (leader: `Space`)
 | Key | Action |
 |-----|--------|
-| `<leader>ff` | Find files (telescope) |
-| `<leader>fg` | Live grep (telescope) |
-| `<leader>fb` | Buffers |
+| `<leader><space>` | Find files |
+| `<leader>sg` | Live grep (telescope) |
+| `<leader>,` | Switch buffers |
 | `<leader>e` | File explorer (neo-tree) |
 | `C-h/j/k/l` | Navigate windows |
+
+See [LazyVim keymaps](https://www.lazyvim.org/keymaps) for the full list.
 
 ### Yazi
 | Key | Action |
@@ -204,7 +207,11 @@ dotfiles/
 └── private_dot_config/
     ├── bat/config                                   # bat theme
     ├── lazygit/config.yml                           # lazygit settings
-    ├── nvim/init.lua                                # neovim config
+    ├── nvim/                                        # neovim (LazyVim)
+    │   ├── init.lua                                 # bootstrap lazy.nvim
+    │   └── lua/
+    │       ├── config/                              # options, keymaps, autocmds
+    │       └── plugins/                             # custom plugin specs
     ├── ripgrep/config                               # ripgrep defaults
     ├── starship.toml                                # prompt config
     └── yazi/                                        # yazi file manager
