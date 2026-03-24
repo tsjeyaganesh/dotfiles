@@ -61,5 +61,11 @@ else
   chezmoi init --apply "$DOTFILES_REPO"
 fi
 
+# ── Set default shell to zsh ──────────────────────────────────────────
+if command -v zsh &>/dev/null && [ "$SHELL" != "$(command -v zsh)" ]; then
+  echo "Changing default shell to zsh..."
+  chsh -s "$(command -v zsh)"
+fi
+
 echo ""
 echo "Done! Restart your shell or run: exec zsh"
