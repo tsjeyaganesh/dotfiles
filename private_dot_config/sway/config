@@ -159,21 +159,21 @@ for_window [class=".*"] inhibit_idle fullscreen
 for_window [app_id=".*"] inhibit_idle fullscreen
 
 # ── Autostart ─────────────────────────────────────────────────────────
-exec wl-paste --type text --watch cliphist store
-exec wl-paste --type image --watch cliphist store
-exec swaync
-exec_always autotiling
-exec_always kanshi
+exec which wl-paste && wl-paste --type text --watch cliphist store
+exec which wl-paste && wl-paste --type image --watch cliphist store
+exec which swaync && swaync
+exec_always which autotiling && autotiling
+exec_always which kanshi && kanshi
 
 # GTK theme — only runs inside Sway (guarded by $SWAYSOCK)
-exec_always test -n "$SWAYSOCK" && gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
-exec_always test -n "$SWAYSOCK" && gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
-exec_always test -n "$SWAYSOCK" && gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
-exec_always test -n "$SWAYSOCK" && gsettings set org.gnome.desktop.interface cursor-size 24
-exec_always test -n "$SWAYSOCK" && gsettings set org.gnome.desktop.interface font-name 'JetBrainsMono Nerd Font 10'
-exec_always test -n "$SWAYSOCK" && gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+exec_always test -n "$SWAYSOCK" && which gsettings && { \
+    gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'; \
+    gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'; \
+    gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'; \
+    gsettings set org.gnome.desktop.interface cursor-size 24; \
+    gsettings set org.gnome.desktop.interface font-name 'JetBrainsMono Nerd Font 10'; \
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'; \
+}
 
 # ── Status bar ────────────────────────────────────────────────────────
-bar {
-    swaybar_command waybar
-}
+exec_always pkill -q waybar; sleep 0.5; waybar

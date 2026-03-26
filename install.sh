@@ -26,7 +26,11 @@ elif command -v apt-get &>/dev/null; then
     zsh vim tmux alacritty curl wget git jq unzip fontconfig build-essential \
     ripgrep bat fd-find fzf eza direnv \
     ffmpeg p7zip-full poppler-utils imagemagick w3m lynx \
-    sway waybar wofi grim slurp wl-clipboard || true
+    sway waybar wofi grim slurp wl-clipboard \
+    swayidle swaylock swaybg kanshi autotiling wlogout \
+    cliphist brightnessctl playerctl \
+    sway-notification-center grimshot \
+    xdg-desktop-portal-wlr || true
 
 elif command -v dnf &>/dev/null; then
   sudo dnf install -y \
@@ -62,6 +66,28 @@ if [[ -f "${SCRIPT_DIR}/.chezmoi.toml.tmpl" ]]; then
   chezmoi apply --source "${SCRIPT_DIR}"
 else
   chezmoi init --apply "$DOTFILES_REPO"
+fi
+
+# ── Sway: fix portal and waybar services ──────────────────────────────
+if command -v sway &>/dev/null; then
+  # Mask waybar.service — Sway launches waybar directly via exec_always
+  if systemctl --user is-enabled waybar.service &>/dev/null; then
+    echo "Disabling systemd waybar.service (Sway launches waybar directly)..."
+    systemctl --user disable --now waybar.service 2>/dev/null || true
+    systemctl --user mask waybar.service 2>/dev/null || true
+  fi
+
+  # Mask xdg-desktop-portal-gtk — it fails in Sway (no DISPLAY) and blocks
+  # waybar startup with a 25s timeout
+  echo "Masking xdg-desktop-portal-gtk.service (not needed under Sway)..."
+  systemctl --user mask xdg-desktop-portal-gtk.service 2>/dev/null || true
+fi
+
+# ── Disable GDM auto-login ───────────────────────────────────────────
+GDM_CONF="/etc/gdm3/custom.conf"
+if [ -f "$GDM_CONF" ] && grep -q 'AutomaticLoginEnable=true' "$GDM_CONF"; then
+  echo "Disabling GDM auto-login..."
+  sudo sed -i 's/^AutomaticLoginEnable=true/AutomaticLoginEnable=false/' "$GDM_CONF"
 fi
 
 # ── Set default shell to zsh ──────────────────────────────────────────
