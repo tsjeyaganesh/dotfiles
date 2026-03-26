@@ -1,0 +1,109 @@
+/* Catppuccin Mocha */
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 13px;
+}
+
+.notification-row {
+    outline: none;
+}
+
+.notification {
+    border-radius: 10px;
+    margin: 5px 10px;
+    padding: 0;
+    background: #1e1e2e;
+    border: 1px solid #45475a;
+}
+
+.notification-content {
+    padding: 10px;
+}
+
+.close-button {
+    background: #313244;
+    color: #cdd6f4;
+    border-radius: 50%;
+    margin: 5px;
+    padding: 2px;
+}
+
+.close-button:hover {
+    background: #f38ba8;
+    color: #1e1e2e;
+}
+
+.notification-default-action,
+.notification-action {
+    border-radius: 8px;
+    margin: 5px;
+    padding: 5px 10px;
+    background: #313244;
+    color: #cdd6f4;
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+    background: #45475a;
+}
+
+.summary {
+    color: #cdd6f4;
+    font-weight: bold;
+}
+
+.body {
+    color: #a6adc8;
+}
+
+.control-center {
+    background: #1e1e2e;
+    border: 2px solid #45475a;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.control-center-list {
+    background: transparent;
+}
+
+widget.label > label {
+    color: #cdd6f4;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.widget-title {
+    margin: 5px 10px;
+}
+
+.widget-title > button {
+    background: #313244;
+    color: #cdd6f4;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.widget-title > button:hover {
+    background: #f38ba8;
+    color: #1e1e2e;
+}
+
+.widget-dnd {
+    margin: 5px 10px;
+    padding: 5px;
+}
+
+.widget-dnd > switch {
+    background: #313244;
+    border-radius: 20px;
+}
+
+.widget-dnd > switch:checked {
+    background: #89b4fa;
+}
+
+.widget-dnd > switch slider {
+    background: #cdd6f4;
+    border-radius: 50%;
+}

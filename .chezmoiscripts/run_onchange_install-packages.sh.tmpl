@@ -163,6 +163,17 @@ if command -v apt-get &>/dev/null; then
   install_if_missing gh \
     '(type -p wget >/dev/null || sudo apt install wget -y) && sudo mkdir -p -m 755 /etc/apt/keyrings && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli-stable.list > /dev/null && sudo apt update && sudo apt install gh -y'
 
+{{ if eq .osid "linux" }}
+  # ── Sway / Wayland (native Linux only) ─────────────────────────────
+  echo "── Installing Sway WM and Wayland tools ──────────────────────────"
+  sudo apt-get install -y -qq \
+    sway swaybg swayidle swaylock \
+    waybar wofi sway-notification-center \
+    grim slurp wl-clipboard \
+    brightnessctl playerctl \
+    wlogout kanshi nwg-look wlsunset cliphist autotiling || true
+{{ end }}
+
 elif command -v dnf &>/dev/null; then
   # ── dnf base packages ──────────────────────────────────────────────
   sudo dnf install -y \
@@ -215,6 +226,17 @@ elif command -v dnf &>/dev/null; then
   install_if_missing yazi \
     "install_gh_binary sxyazi/yazi 'yazi-${GH_ARCH}-unknown-linux' yazi"
 
+{{ if eq .osid "linux" }}
+  # ── Sway / Wayland (native Linux only) ─────────────────────────────
+  echo "── Installing Sway WM and Wayland tools ──────────────────────────"
+  sudo dnf install -y \
+    sway swaybg swayidle swaylock \
+    waybar wofi SwayNotificationCenter \
+    grim slurp wl-clipboard \
+    brightnessctl playerctl \
+    kanshi wlsunset cliphist autotiling || true
+{{ end }}
+
 elif command -v pacman &>/dev/null; then
   # ── Arch ───────────────────────────────────────────────────────────
   sudo pacman -Syu --noconfirm --needed \
@@ -231,6 +253,18 @@ elif command -v pacman &>/dev/null; then
     echo "Upgrading Neovim to >= $NVIM_REQUIRED (LazyVim requirement)..."
     sudo pacman -Syu --noconfirm neovim
   fi
+
+{{ if eq .osid "linux" }}
+  # ── Sway / Wayland (native Linux only) ─────────────────────────────
+  echo "── Installing Sway WM and Wayland tools ──────────────────────────"
+  sudo pacman -Syu --noconfirm --needed \
+    sway swaybg swayidle swaylock \
+    waybar wofi swaync \
+    grim slurp wl-clipboard \
+    brightnessctl playerctl \
+    autotiling kanshi wlsunset cliphist \
+    wlogout nwg-look || true
+{{ end }}
 fi
 
 # ── Nerd Font (all Linux/WSL) ────────────────────────────────────────
@@ -296,3 +330,9 @@ fi
 echo "  • Run 'tmux' and press prefix+I to install tmux plugins"
 echo "  • Run 'nvim' — LazyVim and plugins will auto-install on first launch"
 echo "  • Run 'ya pack -a yazi-rs/flavors:catppuccin-mocha' to install the yazi theme"
+{{ if eq .osid "linux" -}}
+if command -v sway &>/dev/null; then
+  echo "  • Sway WM installed — select 'Sway' from your display manager at login"
+  echo "  • Run 'nwg-look' to configure GTK themes"
+fi
+{{ end -}}
