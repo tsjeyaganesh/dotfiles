@@ -2,6 +2,7 @@
     "layer": "top",
     "position": "top",
     "height": 32,
+    "exclusive_zone": 32,
     "spacing": 0,
 
     "modules-left": ["sway/workspaces", "sway/mode"],

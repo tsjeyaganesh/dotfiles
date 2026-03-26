@@ -33,6 +33,8 @@ input type:touchpad {
     scroll_method two_finger
 }
 
+seat * xcursor_theme Adwaita 24
+
 # ── Idle / Lock ───────────────────────────────────────────────────────
 exec swayidle -w \
     timeout 300 '$lock' \
@@ -176,6 +178,4 @@ exec_always test -n "$SWAYSOCK" && which gsettings && { \
 }
 
 # ── Status bar ────────────────────────────────────────────────────────
-bar {
-    swaybar_command waybar
-}
+exec_always pkill -x waybar; sleep 2 && waybar &
