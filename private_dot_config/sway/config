@@ -176,4 +176,6 @@ exec_always test -n "$SWAYSOCK" && which gsettings && { \
 }
 
 # ── Status bar ────────────────────────────────────────────────────────
-exec_always pkill -q waybar; sleep 0.5; waybar
+bar {
+    swaybar_command waybar
+}
