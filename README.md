@@ -103,9 +103,30 @@ These are installed automatically to enable full preview support in yazi:
 - **zsh-completions** — additional completions
 - **fzf-tab** — fzf-powered tab completion
 
+### Sway Window Manager (native Linux only)
+
+A full [Sway](https://swaywm.org/) tiling WM setup with Catppuccin Mocha theming, installed only on native Linux (not WSL or macOS).
+
+| Tool | Description |
+|------|-------------|
+| **sway** | i3-compatible Wayland compositor |
+| **waybar** | Status bar |
+| **wofi** | Application launcher |
+| **swaync** | Notification center |
+| **swaylock** | Lock screen |
+| **wlogout** | Power/logout menu |
+| **kanshi** | Auto display profile switching |
+| **wlsunset** | Night light / blue light filter |
+| **autotiling** | Auto alternate horizontal/vertical splits |
+| **nwg-look** | GTK theme settings for Wayland |
+| **grim** + **slurp** | Screenshots |
+| **cliphist** | Clipboard history |
+| **brightnessctl** | Screen brightness control |
+| **playerctl** | Media playback control |
+
 ### Font
 
-- **JetBrainsMono Nerd Font** — required for icons in neovim, lazygit, starship, and yazi
+- **JetBrainsMono Nerd Font** — required for icons in neovim, lazygit, starship, yazi, and waybar
 
 ## OS-Specific Behavior
 
@@ -122,6 +143,9 @@ These are installed automatically to enable full preview support in yazi:
 - Tools not in distro repos are installed from GitHub releases (latest version, arch-aware)
 - Neovim 0.11+ installed from GitHub releases (apt/dnf ship older versions)
 - JetBrainsMono Nerd Font installed to `~/.local/share/fonts`
+- **Sway WM** installed on native Linux with full Catppuccin Mocha theming
+- GDM auto-login is disabled automatically so the session chooser (gear icon) appears at login — select "Sway" to use the tiling WM
+- Wayland environment variables set conditionally when running under Sway
 
 ## Key Bindings
 
@@ -159,6 +183,20 @@ See [LazyVim keymaps](https://www.lazyvim.org/keymaps) for the full list.
 | `gd` | Go to ~/Downloads |
 | `gp` | Go to ~/projects |
 | `Ctrl-s` | Open shell in current dir |
+
+### Sway (mod key: `Super`)
+| Key | Action |
+|-----|--------|
+| `Super+Return` | Open terminal |
+| `Super+d` | App launcher (wofi) |
+| `Super+q` | Close window |
+| `Super+h/j/k/l` | Focus left/down/up/right |
+| `Super+Shift+h/j/k/l` | Move window |
+| `Super+1-9` | Switch workspace |
+| `Super+Shift+1-9` | Move window to workspace |
+| `Super+f` | Fullscreen |
+| `Super+Shift+space` | Toggle floating |
+| `Super+Shift+e` | Power menu (wlogout) |
 
 ### Shell Aliases
 | Alias | Command |
@@ -201,7 +239,7 @@ dotfiles/
 │   └── run_onchange_install-packages.sh.tmpl        # auto-installs all tools
 ├── install.sh                                       # bootstrap script
 ├── dot_zshrc.tmpl                                   # ~/.zshrc (OS-aware)
-├── dot_zshenv                                       # ~/.zshenv (XDG, PATH)
+├── dot_zshenv.tmpl                                   # ~/.zshenv (XDG, PATH, Wayland env vars)
 ├── dot_gitconfig.tmpl                               # ~/.gitconfig (OS-aware)
 ├── dot_tmux.conf                                    # ~/.tmux.conf
 └── private_dot_config/
@@ -214,8 +252,23 @@ dotfiles/
     │       └── plugins/                             # custom plugin specs
     ├── ripgrep/config                               # ripgrep defaults
     ├── starship.toml                                # prompt config
-    └── yazi/                                        # yazi file manager
-        ├── yazi.toml
-        ├── keymap.toml
-        └── theme.toml
+    ├── yazi/                                        # yazi file manager
+    │   ├── yazi.toml
+    │   ├── keymap.toml
+    │   └── theme.toml
+    ├── sway/config                                  # sway WM config
+    ├── waybar/                                      # status bar
+    │   ├── config.jsonc
+    │   └── style.css
+    ├── wofi/                                        # app launcher
+    │   ├── config
+    │   └── style.css
+    ├── swaync/                                      # notifications
+    │   ├── config.json
+    │   └── style.css
+    ├── swaylock/config                              # lock screen
+    ├── wlogout/                                     # power menu
+    │   ├── layout
+    │   └── style.css
+    └── kanshi/config                                # display profiles
 ```
