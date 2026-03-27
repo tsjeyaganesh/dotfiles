@@ -2,25 +2,33 @@
     "layer": "top",
     "position": "top",
     "height": 32,
-    "exclusive_zone": 32,
     "spacing": 0,
-
-    "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["clock"],
-    "modules-right": ["tray", "idle_inhibitor", "network", "pulseaudio", "backlight", "battery", "custom/notification"],
-
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "tray",
+        "idle_inhibitor",
+        "network",
+        "pulseaudio",
+        "backlight",
+        "battery",
+        "custom/notification"
+    ],
     "sway/workspaces": {
         "disable-scroll": false,
         "all-outputs": true,
         "format": "{name}"
     },
-
     "sway/mode": {
-        "format": " {}"
+        "format": "󰒓 {}"
     },
-
     "clock": {
-        "format": "  {:%a %b %d   %H:%M}",
+        "format": "󰥔  {:%a %b %d   %H:%M}",
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
             "format": {
@@ -28,7 +36,6 @@
             }
         }
     },
-
     "battery": {
         "interval": 30,
         "states": {
@@ -36,49 +43,62 @@
             "critical": 15
         },
         "format": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-icons": ["", "", "", "", ""]
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰁭 {capacity}%",
+        "format-icons": [
+            "󰂎",
+            "󰁺",
+            "󰁼",
+            "󰁾",
+            "󰁹"
+        ],
+        "tooltip-format": "{capacity}% - {time}"
     },
-
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-muted": " muted",
+        "format-muted": "󰝟 muted",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
         },
+        "tooltip-format": "Volume: {volume}%\nDevice: {desc}",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-click-right": "pavucontrol"
     },
-
     "network": {
-        "format-wifi": "  {essid}",
-        "format-ethernet": "  {ifname}",
-        "format-disconnected": "  disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+        "format-wifi": "󰖩 {essid}",
+        "format-ethernet": "󰈀 {ifname}",
+        "format-disconnected": "󰖪 disconnected",
+        "tooltip-format-wifi": "WiFi: {essid}\nSignal: {signalStrength}%\nFrequency: {frequency}MHz\nIP: {ipaddr}/{cidr}\nInterface: {ifname}\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
+        "tooltip-format-ethernet": "Ethernet: {ifname}\nIP: {ipaddr}/{cidr}\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
+        "tooltip-format-disconnected": "No network connection",
+        "interval": 5,
         "on-click": "nm-connection-editor"
     },
-
     "backlight": {
-        "format": " {percent}%"
+        "format": "󰃟 {percent}%",
+        "tooltip-format": "Brightness: {percent}%"
     },
-
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
+            "activated": "󰋣",
+            "deactivated": "󰃔"
+        },
+        "tooltip-format-activated": "Idle inhibitor: ON (screen will not sleep)",
+        "tooltip-format-deactivated": "Idle inhibitor: OFF (screen will sleep normally)"
     },
-
     "custom/notification": {
         "tooltip": false,
         "format": "{icon}",
         "format-icons": {
-            "notification": "",
-            "none": "",
-            "dnd-notification": "",
-            "dnd-none": ""
+            "notification": "󰂚",
+            "none": "󰂚",
+            "dnd-notification": "󰂛",
+            "dnd-none": "󰂛"
         },
         "return-type": "json",
         "exec-if": "which swaync-client",
@@ -87,7 +107,6 @@
         "on-click-right": "swaync-client -d -sw",
         "escape": true
     },
-
     "tray": {
         "icon-size": 18,
         "spacing": 10
