@@ -36,7 +36,7 @@ sketchybar --default \
   icon.padding_left=8 \
   icon.padding_right=4
 
-# ── Left: AeroSpace workspaces ───────────────────────────────────
+# ── Left: AeroSpace workspaces (only show occupied + focused) ────
 for sid in 1 2 3 4 5 6 7 8 9; do
   sketchybar --add item space.$sid left \
     --set space.$sid \
@@ -45,6 +45,7 @@ for sid in 1 2 3 4 5 6 7 8 9; do
       icon.padding_right=10 \
       background.color=$ITEM_BG_COLOR \
       background.drawing=off \
+      drawing=off \
       label.drawing=off \
       click_script="aerospace workspace $sid" \
       script="$PLUGIN_DIR/aerospace.sh $sid"

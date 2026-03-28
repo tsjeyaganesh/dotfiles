@@ -1,0 +1,34 @@
+#!/bin/bash
+# macOS system defaults — runs once per machine via chezmoi
+
+{{ if eq .chezmoi.os "darwin" -}}
+echo "Applying macOS defaults..."
+
+# Disable window animations
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+
+# Disable Finder animations
+defaults write com.apple.finder DisableAllAnimations -bool true
+
+# Disable Mission Control animations
+defaults write com.apple.dock expose-animation-duration -float 0
+
+# Disable Dock animations
+defaults write com.apple.dock autohide-time-modifier -float 0
+defaults write com.apple.dock launchanim -bool false
+
+# Disable smooth scrolling
+defaults write NSGlobalDomain NSScrollAnimationEnabled -bool false
+
+# Speed up sheet/dialog animations
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+
+# Disable Quick Look animations
+defaults write -g QLPanelAnimationDuration -float 0
+
+# Restart affected services
+killall Finder 2>/dev/null || true
+killall Dock 2>/dev/null || true
+
+echo "macOS defaults applied."
+{{ end -}}
