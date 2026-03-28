@@ -1,3 +1,13 @@
 install.sh
 README.md
 LICENSE
+
+{{ if ne .osid "linux" }}
+.config/sway
+.config/waybar
+.config/wofi
+.config/swaync
+.config/swaylock
+.config/wlogout
+.config/kanshi
+{{ end }}
