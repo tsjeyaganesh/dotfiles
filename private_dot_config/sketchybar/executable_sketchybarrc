@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# ── Colors (Catppuccin Mocha) ────────────────────────────────────
+export BAR_COLOR=0xff1e1e2e
+export ITEM_BG_COLOR=0xff313244
+export ACCENT_COLOR=0xff89b4fa
+export TEXT_COLOR=0xffcdd6f4
+export SUBTEXT_COLOR=0xffa6adc8
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+# ── Bar appearance ───────────────────────────────────────────────
+sketchybar --bar \
+  height=37 \
+  blur_radius=30 \
+  position=top \
+  sticky=off \
+  padding_left=10 \
+  padding_right=10 \
+  color=$BAR_COLOR \
+  shadow=on
+
+# ── Defaults ─────────────────────────────────────────────────────
+sketchybar --default \
+  icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
+  icon.color=$TEXT_COLOR \
+  label.font="JetBrainsMono Nerd Font:Bold:13.0" \
+  label.color=$TEXT_COLOR \
+  background.color=$ITEM_BG_COLOR \
+  background.corner_radius=5 \
+  background.height=26 \
+  padding_left=5 \
+  padding_right=5 \
+  label.padding_left=4 \
+  label.padding_right=4 \
+  icon.padding_left=8 \
+  icon.padding_right=4
+
+# ── Left: AeroSpace workspaces ───────────────────────────────────
+for sid in 1 2 3 4 5 6 7 8 9; do
+  sketchybar --add item space.$sid left \
+    --set space.$sid \
+      icon="$sid" \
+      icon.padding_left=10 \
+      icon.padding_right=10 \
+      background.color=$ITEM_BG_COLOR \
+      background.drawing=off \
+      label.drawing=off \
+      click_script="aerospace workspace $sid" \
+      script="$PLUGIN_DIR/aerospace.sh $sid"
+done
+
+sketchybar --add event aerospace_workspace_change
+
+for sid in 1 2 3 4 5 6 7 8 9; do
+  sketchybar --subscribe space.$sid aerospace_workspace_change
+done
+
+# ── Left: front app ─────────────────────────────────────────────
+sketchybar --add item front_app left \
+  --set front_app \
+    icon.drawing=off \
+    label.font="JetBrainsMono Nerd Font:Bold:13.0" \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# ── Right: clock ─────────────────────────────────────────────────
+sketchybar --add item clock right \
+  --set clock \
+    update_freq=10 \
+    icon=󰃰 \
+    script="$PLUGIN_DIR/clock.sh"
+
+# ── Right: battery ───────────────────────────────────────────────
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=120 \
+    script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery system_woke power_source_change
+
+# ── Right: cpu ───────────────────────────────────────────────────
+sketchybar --add item cpu right \
+  --set cpu \
+    update_freq=5 \
+    icon=󰍛 \
+    script="$PLUGIN_DIR/cpu.sh"
+
+# ── Finalize ─────────────────────────────────────────────────────
+sketchybar --update
