@@ -6,6 +6,8 @@
 {{-   $osid = "wsl" -}}
 {{- end -}}
 
+sourceDir = {{ joinPath .chezmoi.homeDir "dotfiles" | quote }}
+
 [data]
   email = {{ $email | quote }}
   name = {{ $name | quote }}
