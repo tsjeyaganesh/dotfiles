@@ -1,0 +1,14 @@
+# ~/.inputrc — readline configuration (bash and other readline programs)
+
+# Vi-style editing for all readline-based programs.
+set editing-mode vi
+
+# Show which vi mode is active in the prompt.
+set show-mode-in-prompt on
+
+# Mode strings double as cursor-shape escapes:
+#   \e[6 q -> steady bar   (insert mode)
+#   \e[2 q -> steady block (command mode)
+# The \1 ... \2 markers tell readline these bytes are non-printing.
+set vi-ins-mode-string "\1\e[6 q\2(ins) "
+set vi-cmd-mode-string "\1\e[2 q\2(cmd) "

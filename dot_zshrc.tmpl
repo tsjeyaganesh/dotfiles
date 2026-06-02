@@ -28,9 +28,32 @@ zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
 # ── Key bindings ─────────────────────────────────────────────────────
-bindkey -e
+bindkey -v
+export KEYTIMEOUT=1          # 10ms — switch to command mode without Esc lag
+
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+# Keep a few handy emacs-style keys available in insert mode.
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M viins '^a' beginning-of-line
+bindkey -M viins '^e' end-of-line
+
+# ── Vi mode indicator (cursor shape + text, mirrors the bash .inputrc) ─
+# Cursor: bar in insert (\e[6 q), block in command (\e[2 q).
+# Text: (ins)/(cmd) on the right prompt, set here so it survives starship.
+function zle-keymap-select zle-line-init {
+  case ${KEYMAP} in
+    vicmd)      printf '\e[2 q'; RPROMPT='%F{yellow}(cmd)%f' ;;
+    main|viins) printf '\e[6 q'; RPROMPT='%F{green}(ins)%f'  ;;
+  esac
+  zle reset-prompt
+}
+zle -N zle-keymap-select
+zle -N zle-line-init
+
+# Restore the bar cursor before a command runs.
+function zle-line-finish { printf '\e[6 q' }
+zle -N zle-line-finish
 
 # ── Aliases ──────────────────────────────────────────────────────────
 alias ls='ls --color=auto'

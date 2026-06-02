@@ -1,0 +1,6 @@
+# ~/.bashrc — interactive bash configuration
+# (Primary shell is zsh; this applies when dropping into bash.)
+
+# Use vi-style command-line editing (readline). Mode indicator + cursor
+# shape live in ~/.inputrc so every readline program picks them up.
+set -o vi
