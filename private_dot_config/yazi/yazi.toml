@@ -26,8 +26,8 @@ mermaid = [
 
 [open]
 rules = [
-  { name = "*.mmd", use = ["mermaid", "edit"] },
-  { name = "*.mermaid", use = ["mermaid", "edit"] },
+  { url = "*.mmd", use = ["mermaid", "edit"] },
+  { url = "*.mermaid", use = ["mermaid", "edit"] },
   { mime = "text/*", use = "edit" },
   { mime = "image/*", use = "open" },
   { mime = "video/*", use = "open" },
