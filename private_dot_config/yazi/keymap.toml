@@ -9,7 +9,9 @@ prepend_keymap = [
   # Open shell in current dir
   { on = ["<C-s>"], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
 
-  # Preview vs. edit the hovered file directly, one keypress each
-  { on = ["<C-p>"], run = 'shell -- mmdview %h', desc = "Preview diagram" },
+  # Preview vs. edit the hovered file directly, one keypress each.
+  # (Enter is left at its default: it opens read-only via [open].rules
+  # below, resolving text-like files to the "view" opener.)
+  { on = ["<C-p>"], run = 'shell -- extpreview %h', desc = "Preview with external viewer" },
   { on = ["e"], run = 'shell --block -- ${EDITOR:-nvim} %h', desc = "Edit hovered file" },
 ]

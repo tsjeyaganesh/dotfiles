@@ -1,0 +1,9 @@
+#!/bin/sh
+# Open a file read-only in Neovim for quick viewing.
+# q or Esc quits back to the caller (e.g. yazi).
+exec nvim -R \
+  -c 'setlocal nomodifiable' \
+  -c 'set noswapfile' \
+  -c 'nnoremap <buffer> q :q<CR>' \
+  -c 'nnoremap <buffer> <Esc> :q<CR>' \
+  "$@"

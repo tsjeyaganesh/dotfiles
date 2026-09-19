@@ -13,26 +13,28 @@ image_quality = 75
 tab_size = 2
 
 [opener]
+# Full edit access - only reachable directly via the "e" keybinding
+# (keymap.toml), not through [open].rules below.
 edit = [
   { run = '${EDITOR:-nvim} "$@"', block = true, for = "unix" },
+]
+# Read-only quick look, q/Esc to quit back to yazi. This is what
+# Enter resolves to for text-like files via the rules below.
+view = [
+  { run = 'nvimview "$@"', block = true, for = "unix" },
 ]
 open = [
   { run = 'xdg-open "$1"', desc = "Open", for = "linux" },
   { run = 'open "$@"', desc = "Open", for = "macos" },
 ]
-mermaid = [
-  { run = 'mmdview "$1"', desc = "Preview diagram", for = "unix" },
-]
 
 [open]
 rules = [
-  { url = "*.mmd", use = ["mermaid", "edit"] },
-  { url = "*.mermaid", use = ["mermaid", "edit"] },
-  { mime = "text/*", use = "edit" },
+  { mime = "text/*", use = "view" },
   { mime = "image/*", use = "open" },
   { mime = "video/*", use = "open" },
   { mime = "audio/*", use = "open" },
-  { mime = "application/json", use = "edit" },
-  { mime = "*/xml", use = "edit" },
+  { mime = "application/json", use = "view" },
+  { mime = "*/xml", use = "view" },
   { mime = "*", use = "open" },
 ]
