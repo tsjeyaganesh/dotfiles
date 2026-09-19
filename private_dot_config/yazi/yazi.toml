@@ -23,6 +23,8 @@ open = [
 
 [open]
 rules = [
+  { name = "*.mmd", use = "edit" },
+  { name = "*.mermaid", use = "edit" },
   { mime = "text/*", use = "edit" },
   { mime = "image/*", use = "open" },
   { mime = "video/*", use = "open" },
