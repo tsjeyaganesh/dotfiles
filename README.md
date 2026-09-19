@@ -37,8 +37,15 @@ On first run, chezmoi will prompt for your **git name** and **email**, then auto
 | Tool | Description |
 |------|-------------|
 | **zsh** | Default shell with zinit plugin manager |
-| **tmux** | Terminal multiplexer (prefix: `C-a`, vim-style nav, TPM plugins) |
+| **ghostty** | GPU-accelerated terminal (macOS: cask; Linux: apt/dnf via COPR/pacman) |
+| **tmux** | Terminal multiplexer (prefix: `C-a`, vim-style nav, TPM plugins, `allow-passthrough on` for terminal graphics protocols) |
 | **starship** | Cross-shell prompt with git, language, k8s, and docker context |
+
+### Window Manager (macOS only)
+
+| Tool | Description |
+|------|-------------|
+| **AeroSpace** | i3-style tiling WM, multi-monitor aware (`private_dot_config/aerospace/`) |
 
 ### Editor
 
@@ -95,6 +102,16 @@ These are installed automatically to enable full preview support in yazi:
 | **poppler** | PDF preview |
 | **imagemagick** | Image format support (HEIC, JPEG XL, fonts) |
 | **resvg** | SVG rendering (Arch/macOS only) |
+
+### Markdown & Mermaid Preview
+
+Yazi opens files read-only in Neovim by default (`Enter`), fully editable with
+`e`, or with an external viewer via `Ctrl-p`. Scripts live in `dot_local/bin/`.
+
+| Tool | Purpose |
+|------|---------|
+| **node** + **@mermaid-js/mermaid-cli** | Renders `.mmd`/`.mermaid` sources to PNG (`mmdview`) |
+| **MacMD Viewer** (macOS, paid) | Dedicated markdown previewer, opened by `extpreview` for `.md`/`.markdown` |
 
 ### Zsh Plugins (via zinit)
 
@@ -183,6 +200,9 @@ See [LazyVim keymaps](https://www.lazyvim.org/keymaps) for the full list.
 | `gd` | Go to ~/Downloads |
 | `gp` | Go to ~/projects |
 | `Ctrl-s` | Open shell in current dir |
+| `Enter` | Open hovered file read-only in Neovim (`q`/`Esc` to quit back) |
+| `e` | Edit hovered file in `$EDITOR` |
+| `Ctrl-p` | Preview hovered file with its external viewer |
 
 ### Sway (mod key: `Super`)
 | Key | Action |
@@ -242,8 +262,15 @@ dotfiles/
 ├── dot_zshenv.tmpl                                   # ~/.zshenv (XDG, PATH, Wayland env vars)
 ├── dot_gitconfig.tmpl                               # ~/.gitconfig (OS-aware)
 ├── dot_tmux.conf                                    # ~/.tmux.conf
+├── dot_local/
+│   └── bin/                                          # scripts on PATH, used by yazi's openers
+│       ├── executable_mmdview                        # render + open a .mmd/.mermaid file
+│       ├── executable_nvimview                       # read-only Neovim viewer (q/Esc quits)
+│       └── executable_extpreview                     # dispatch to the right external viewer
 └── private_dot_config/
+    ├── aerospace/aerospace.toml                      # AeroSpace tiling WM (macOS)
     ├── bat/config                                   # bat theme
+    ├── ghostty/config                                # Ghostty terminal config
     ├── lazygit/config.yml                           # lazygit settings
     ├── nvim/                                        # neovim (LazyVim)
     │   ├── init.lua                                 # bootstrap lazy.nvim
