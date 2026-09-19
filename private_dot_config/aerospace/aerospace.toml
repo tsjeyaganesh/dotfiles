@@ -138,3 +138,7 @@ run = 'layout floating'
 [[on-window-detected]]
 if.app-id = 'com.apple.Preview'
 run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.arthur.MarkdownViewer'
+run = 'layout floating'
