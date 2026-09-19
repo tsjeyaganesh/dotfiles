@@ -1,8 +1,8 @@
 #!/bin/sh
 # Preview a file with its native external viewer/app, outside yazi and
 # outside the editor. Mermaid sources are rendered first (mmdview);
-# markdown uses macOS Quick Look (QLMarkdown) for a rendered, editor-free
-# view; everything else uses the OS's registered default app.
+# markdown opens in MacMD Viewer, a dedicated preview-only app (no
+# editor pane); everything else uses the OS's registered default app.
 set -eu
 
 case "$1" in
@@ -11,10 +11,7 @@ esac
 
 if [ "$(uname)" = "Darwin" ]; then
   case "$1" in
-    *.md|*.markdown)
-      qlmanage -p "$1" >/dev/null 2>&1 &
-      exit 0
-      ;;
+    *.md|*.markdown) exec open -a "MacMD Viewer" "$1" ;;
   esac
   exec open "$1"
 else

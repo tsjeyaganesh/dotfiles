@@ -23,9 +23,10 @@ if command -v brew &>/dev/null; then
 
   brew install --cask ghostty font-jetbrains-mono-nerd-font || true
 
-  # QLMarkdown: rendered Quick Look preview for .md, used by extpreview
-  brew install --cask qlmarkdown || true
-  qlmanage -r &>/dev/null || true
+  # MacMD Viewer: dedicated markdown previewer (no editor pane), used
+  # by extpreview - real app via `open`, unlike Quick Look extensions
+  # it reliably comes to the foreground.
+  brew install --cask macmd-viewer || true
 
 elif command -v apt-get &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y \
