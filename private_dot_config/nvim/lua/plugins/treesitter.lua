@@ -5,7 +5,6 @@ return {
       ensure_installed = {
         "lua", "python", "javascript", "typescript",
         "go", "rust", "bash", "json", "yaml", "toml", "markdown",
-        "mermaid",
       },
     },
   },
