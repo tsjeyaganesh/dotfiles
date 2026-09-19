@@ -12,6 +12,6 @@ prepend_keymap = [
   # Preview vs. edit the hovered file directly, one keypress each.
   # (Enter is left at its default: it opens read-only via [open].rules
   # below, resolving text-like files to the "view" opener.)
-  { on = ["<C-p>"], run = 'shell --block -- extpreview %h', desc = "Preview with external viewer" },
+  { on = ["<C-p>"], run = 'shell -- extpreview %h', desc = "Preview with external viewer" },
   { on = ["e"], run = 'shell --block -- ${EDITOR:-nvim} %h', desc = "Edit hovered file" },
 ]

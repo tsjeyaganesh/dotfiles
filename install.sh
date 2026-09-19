@@ -17,17 +17,22 @@ if command -v brew &>/dev/null; then
     starship zoxide fzf ripgrep fd bat eza \
     git-delta lazygit gh \
     direnv jq yq curl wget \
-    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx node glow || true
+    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx node || true
 
   brew install --cask nikitabobko/tap/aerospace || true
 
   brew install --cask ghostty font-jetbrains-mono-nerd-font || true
 
+  # MacMD Viewer: dedicated markdown previewer (no editor pane), used
+  # by extpreview - real app via `open`, unlike Quick Look extensions
+  # it reliably comes to the foreground.
+  brew install --cask macmd-viewer || true
+
 elif command -v apt-get &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y \
     zsh vim tmux ghostty curl wget git jq unzip fontconfig build-essential \
     ripgrep bat fd-find fzf eza direnv \
-    ffmpeg p7zip-full poppler-utils imagemagick w3m lynx nodejs npm glow \
+    ffmpeg p7zip-full poppler-utils imagemagick w3m lynx nodejs npm \
     sway waybar wofi grim slurp wl-clipboard \
     swayidle swaylock swaybg kanshi autotiling wlogout \
     cliphist brightnessctl playerctl \
@@ -39,7 +44,7 @@ elif command -v dnf &>/dev/null; then
   sudo dnf install -y \
     zsh vim tmux ghostty curl wget git jq unzip fontconfig \
     fzf ripgrep fd-find bat direnv gcc make eza \
-    ffmpeg p7zip poppler-utils ImageMagick w3m lynx nodejs npm glow \
+    ffmpeg p7zip poppler-utils ImageMagick w3m lynx nodejs npm \
     sway waybar wofi grim slurp wl-clipboard || true
 
 elif command -v pacman &>/dev/null; then
@@ -48,7 +53,7 @@ elif command -v pacman &>/dev/null; then
     starship zoxide fzf ripgrep fd bat eza \
     git-delta lazygit github-cli \
     direnv jq yq curl wget base-devel \
-    yazi ffmpeg p7zip poppler imagemagick resvg w3m lynx nodejs npm glow \
+    yazi ffmpeg p7zip poppler imagemagick resvg w3m lynx nodejs npm \
     sway waybar wofi grim slurp wl-clipboard || true
 
 else
