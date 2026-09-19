@@ -1,0 +1,17 @@
+#!/bin/sh
+# Render a Mermaid (.mmd/.mermaid) file to a PNG via mermaid-cli and open it
+# as an image - no editor, no terminal graphics protocol.
+set -eu
+
+if [ $# -lt 1 ]; then
+  echo "usage: mmdview file.mmd" >&2
+  exit 1
+fi
+
+out="$(mktemp -u "${TMPDIR:-/tmp}/mmdview.XXXXXX").png"
+mmdc -i "$1" -o "$out" -b transparent -t "${MMDVIEW_THEME:-dark}"
+
+case "$(uname)" in
+  Darwin) open "$out" ;;
+  *) xdg-open "$out" >/dev/null 2>&1 & ;;
+esac

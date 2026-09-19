@@ -100,19 +100,6 @@ function y() {
   rm -f -- "$tmp"
 }
 
-# ── Mermaid diagram preview (renders via mmdc, opens as an image) ────
-(( $+commands[mmdc] )) && function mmdview() {
-  local f="${1:?usage: mmdview file.mmd}"
-  local out
-  out="$(mktemp -u -t mmdview).png"
-  mmdc -i "$f" -o "$out" -b transparent -t "${MMDVIEW_THEME:-dark}" || return 1
-  {{ if eq .osid "darwin" -}}
-  open "$out"
-  {{ else -}}
-  xdg-open "$out" &>/dev/null &
-  {{ end -}}
-}
-
 # ── Tool init ────────────────────────────────────────────────────────
 (( $+commands[starship] )) && eval "$(starship init zsh)"
 (( $+commands[zoxide] ))   && eval "$(zoxide init zsh --cmd cd)"
