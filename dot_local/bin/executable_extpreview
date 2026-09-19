@@ -1,18 +1,16 @@
 #!/bin/sh
 # Preview a file with its native external viewer/app, outside yazi and
 # outside the editor. Mermaid sources are rendered first (mmdview);
-# markdown opens in MacMD Viewer, a dedicated preview-only app (no
-# editor pane); everything else uses the OS's registered default app.
+# markdown renders via glow, right in the terminal (q to quit back);
+# everything else uses the OS's registered default app.
 set -eu
 
 case "$1" in
   *.mmd|*.mermaid) exec mmdview "$1" ;;
+  *.md|*.markdown) exec glow -p "$1" ;;
 esac
 
 if [ "$(uname)" = "Darwin" ]; then
-  case "$1" in
-    *.md|*.markdown) exec open -a "MacMD Viewer" "$1" ;;
-  esac
   exec open "$1"
 else
   xdg-open "$1" >/dev/null 2>&1 &
