@@ -1,14 +1,22 @@
 #!/bin/sh
 # Preview a file with its native external viewer/app, outside yazi and
 # outside the editor. Mermaid sources are rendered first (mmdview);
-# everything else uses the OS's registered default app.
+# markdown uses macOS Quick Look (QLMarkdown) for a rendered, editor-free
+# view; everything else uses the OS's registered default app.
 set -eu
 
 case "$1" in
   *.mmd|*.mermaid) exec mmdview "$1" ;;
 esac
 
-case "$(uname)" in
-  Darwin) exec open "$1" ;;
-  *) xdg-open "$1" >/dev/null 2>&1 & ;;
-esac
+if [ "$(uname)" = "Darwin" ]; then
+  case "$1" in
+    *.md|*.markdown)
+      qlmanage -p "$1" >/dev/null 2>&1 &
+      exit 0
+      ;;
+  esac
+  exec open "$1"
+else
+  xdg-open "$1" >/dev/null 2>&1 &
+fi

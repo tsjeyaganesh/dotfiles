@@ -23,6 +23,10 @@ if command -v brew &>/dev/null; then
 
   brew install --cask ghostty font-jetbrains-mono-nerd-font || true
 
+  # QLMarkdown: rendered Quick Look preview for .md, used by extpreview
+  brew install --cask qlmarkdown || true
+  qlmanage -r &>/dev/null || true
+
 elif command -v apt-get &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y \
     zsh vim tmux ghostty curl wget git jq unzip fontconfig build-essential \

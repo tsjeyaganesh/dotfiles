@@ -18,6 +18,10 @@ if command -v brew &>/dev/null; then
 
   brew install --cask ghostty font-jetbrains-mono-nerd-font || true
 
+  # QLMarkdown: rendered Quick Look preview for .md, used by extpreview
+  brew install --cask qlmarkdown || true
+  qlmanage -r &>/dev/null || true
+
   # Start macOS services
   if command -v sketchybar &>/dev/null; then
     brew services start sketchybar 2>/dev/null || true
