@@ -17,7 +17,7 @@ if command -v brew &>/dev/null; then
     starship zoxide fzf ripgrep fd bat eza \
     git-delta lazygit gh \
     direnv jq yq curl wget \
-    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx || true
+    yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx node || true
 
   brew install --cask nikitabobko/tap/aerospace || true
 
@@ -27,7 +27,7 @@ elif command -v apt-get &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y \
     zsh vim tmux ghostty curl wget git jq unzip fontconfig build-essential \
     ripgrep bat fd-find fzf eza direnv \
-    ffmpeg p7zip-full poppler-utils imagemagick w3m lynx \
+    ffmpeg p7zip-full poppler-utils imagemagick w3m lynx nodejs npm \
     sway waybar wofi grim slurp wl-clipboard \
     swayidle swaylock swaybg kanshi autotiling wlogout \
     cliphist brightnessctl playerctl \
@@ -39,7 +39,7 @@ elif command -v dnf &>/dev/null; then
   sudo dnf install -y \
     zsh vim tmux ghostty curl wget git jq unzip fontconfig \
     fzf ripgrep fd-find bat direnv gcc make eza \
-    ffmpeg p7zip poppler-utils ImageMagick w3m lynx \
+    ffmpeg p7zip poppler-utils ImageMagick w3m lynx nodejs npm \
     sway waybar wofi grim slurp wl-clipboard || true
 
 elif command -v pacman &>/dev/null; then
@@ -48,11 +48,16 @@ elif command -v pacman &>/dev/null; then
     starship zoxide fzf ripgrep fd bat eza \
     git-delta lazygit github-cli \
     direnv jq yq curl wget base-devel \
-    yazi ffmpeg p7zip poppler imagemagick resvg w3m lynx \
+    yazi ffmpeg p7zip poppler imagemagick resvg w3m lynx nodejs npm \
     sway waybar wofi grim slurp wl-clipboard || true
 
 else
   echo "Warning: Could not detect package manager — install apps manually"
+fi
+
+# mmdview (see dot_zshrc.tmpl) renders .mmd files via mermaid-cli
+if command -v npm &>/dev/null; then
+  npm install -g @mermaid-js/mermaid-cli || true
 fi
 
 # Install chezmoi if needed
