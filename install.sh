@@ -23,10 +23,9 @@ if command -v brew &>/dev/null; then
 
   brew install --cask ghostty font-jetbrains-mono-nerd-font || true
 
-  # MacMD Viewer: dedicated markdown previewer (no editor pane), used
-  # by extpreview - real app via `open`, unlike Quick Look extensions
-  # it reliably comes to the foreground.
-  brew install --cask macmd-viewer || true
+  # duti: sets MDViewer (built by run_after_build-mdviewer.sh) as the
+  # default app for Markdown files.
+  brew install duti || true
 
 elif command -v apt-get &>/dev/null; then
   sudo apt-get update && sudo apt-get install -y \

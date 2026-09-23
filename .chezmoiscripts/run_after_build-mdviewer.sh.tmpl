@@ -1,0 +1,49 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Build MDViewer (https://github.com/tsjeyaganesh/mdviewer) from source on
+# every `chezmoi apply`, install it to /Applications, and make it the
+# default app for Markdown files. Rebuilds only when the upstream commit
+# changed or the app is missing; set MDVIEWER_REBUILD=1 to force a build.
+# Never fails the apply: problems are reported and skipped.
+set -uo pipefail
+
+REPO="git@github.com:tsjeyaganesh/mdviewer.git"
+SRC="$HOME/.local/src/mdviewer"
+APP="/Applications/MDViewer.app"
+BUNDLE_ID="com.jeyaganesh.mdviewer"
+STAMP="$SRC/build/.installed-commit"
+
+skip() { echo "  ⚠ mdviewer: $*" >&2; exit 0; }
+
+echo "── MDViewer ───────────────────────────────────────────────────────"
+
+xcrun --find swift &>/dev/null || skip "Swift not found - run: xcode-select --install"
+command -v npm &>/dev/null || skip "node/npm not found - run: brew install node"
+
+if [[ -d "$SRC/.git" ]]; then
+  git -C "$SRC" fetch --quiet origin || skip "git fetch failed (SSH key for GitHub?)"
+  git -C "$SRC" reset --quiet --hard '@{upstream}' || skip "could not update $SRC"
+else
+  mkdir -p "$(dirname "$SRC")"
+  git clone --quiet "$REPO" "$SRC" || skip "git clone failed (SSH key for GitHub?)"
+fi
+
+HEAD="$(git -C "$SRC" rev-parse HEAD)"
+if [[ -d "$APP" && "$(cat "$STAMP" 2>/dev/null)" == "$HEAD" && -z "${MDVIEWER_REBUILD:-}" ]]; then
+  echo "✓ MDViewer up to date (${HEAD:0:7})"
+else
+  echo "Building MDViewer ${HEAD:0:7}..."
+  "$SRC/scripts/build-app.sh" --install || skip "build failed"
+  echo "$HEAD" > "$STAMP"
+fi
+
+# Default viewer for .md / .markdown (Finder double-click, `open file.md`)
+if command -v duti &>/dev/null; then
+  duti -s "$BUNDLE_ID" net.daringfireball.markdown all
+  duti -s "$BUNDLE_ID" .md all
+  duti -s "$BUNDLE_ID" .markdown all
+  echo "✓ MDViewer set as default Markdown app"
+else
+  echo "  ⚠ duti not found - skipping default-app association (brew install duti)"
+fi
+{{ end -}}

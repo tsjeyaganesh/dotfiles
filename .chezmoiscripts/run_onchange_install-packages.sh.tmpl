@@ -87,7 +87,8 @@ brew install \
   starship zoxide fzf ripgrep fd bat eza \
   git-delta lazygit gh \
   direnv jq yq curl wget \
-  yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx
+  yazi ffmpeg sevenzip poppler imagemagick resvg w3m lynx \
+  node duti  # node: builds mdviewer; duti: default-app association
 
 # Ensure Neovim 0.11+ (required by LazyVim)
 NVIM_CURRENT="$(nvim --version 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+' || echo "0.0")"

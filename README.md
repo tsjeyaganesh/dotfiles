@@ -111,7 +111,7 @@ Yazi opens files read-only in Neovim by default (`Enter`), fully editable with
 | Tool | Purpose |
 |------|---------|
 | **node** + **@mermaid-js/mermaid-cli** | Renders `.mmd`/`.mermaid` sources to PNG (`mmdview`) |
-| **MacMD Viewer** (macOS, paid) | Dedicated markdown previewer, opened by `extpreview` for `.md`/`.markdown` |
+| **[MDViewer](https://github.com/tsjeyaganesh/mdviewer)** (macOS) | Native Markdown viewer with Vim keys, built from source on every `chezmoi apply` (rebuilds only on new commits; `MDVIEWER_REBUILD=1` forces). Opened by `extpreview` and set as the default `.md` app via `duti` |
 
 ### Zsh Plugins (via zinit)
 
@@ -256,7 +256,8 @@ dotfiles/
 ├── .chezmoi.toml.tmpl                              # chezmoi config (prompts for name/email, detects OS)
 ├── .chezmoiignore                                   # files to exclude from home dir
 ├── .chezmoiscripts/
-│   └── run_onchange_install-packages.sh.tmpl        # auto-installs all tools
+│   ├── run_onchange_install-packages.sh.tmpl        # auto-installs all tools
+│   └── run_after_build-mdviewer.sh.tmpl             # builds/installs MDViewer (macOS)
 ├── install.sh                                       # bootstrap script
 ├── dot_zshrc.tmpl                                   # ~/.zshrc (OS-aware)
 ├── dot_zshenv.tmpl                                   # ~/.zshenv (XDG, PATH, Wayland env vars)
